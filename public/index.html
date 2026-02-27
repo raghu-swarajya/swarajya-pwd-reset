@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swarajya — Password Reset</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #ce4142;
+      --brand-light: #d96464;
+      --dark: #1A0808;
+      --cream: #FDF5F5;
+      --muted: #8C7070;
+      --border: #E8D5D5;
+      --success: #2D6A4F;
+      --error: #C1121F;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(206,65,66,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; left: -200px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(206,65,66,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 52px 48px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 2px 40px rgba(26,18,8,0.06);
+      animation: rise 0.5s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: var(--saffron);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      width: 20px; height: 20px;
+      fill: white;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text span {
+      color: var(--saffron);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--dark);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(206,65,66,0.08);
+      background: white;
+    }
+
+    input::placeholder { color: #C4B8AA; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 24px 0;
+    }
+
+    .team-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .team-note::before {
+      content: '🔒';
+      font-size: 11px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.2px;
+    }
+
+    button:hover { background: var(--brand-light); }
+    button:active { transform: scale(0.99); }
+    button:disabled { background: #D4B5B5; cursor: not-allowed; transform: none; }
+
+    .message {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      animation: fadein 0.3s ease;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.success {
+      background: #EAF4EE;
+      color: var(--success);
+      border: 1px solid #B7DEC5;
+      display: block;
+    }
+
+    .message.error {
+      background: #FEF0F0;
+      color: var(--error);
+      border: 1px solid #F4BFBF;
+      display: block;
+    }
+
+    .footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-area">
+      <img src="https://articleimage.sgp1.cdn.digitaloceanspaces.com/articlespace/swarajya/Swarajya-logo-red.png" alt="Swarajya" style="height: 36px; object-fit: contain;"/>
+    </div>
+
+    <h1>Reset Password</h1>
+    <p class="subtitle">Update a subscriber's login password. For Swarajya team use only.</p>
+
+    <div class="field">
+      <label>Subscriber Email</label>
+      <input type="email" id="email" placeholder="subscriber@example.com" autocomplete="off"/>
+    </div>
+
+    <div class="field">
+      <label>New Password</label>
+      <input type="password" id="newPassword" placeholder="Min. 6 characters"/>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="team-note">Team verification required</div>
+    <div class="field">
+      <label>Team Password</label>
+      <input type="password" id="teamPassword" placeholder="Enter team access password"/>
+    </div>
+
+    <button id="submitBtn" onclick="resetPassword()">Reset Password</button>
+
+    <div class="message" id="message"></div>
+
+    <div class="footer">Swarajya Internal Tool · Admin Access Only</div>
+  </div>
+
+  <script>
+    async function resetPassword() {
+      const email = document.getElementById('email').value.trim();
+      const newPassword = document.getElementById('newPassword').value;
+      const teamPassword = document.getElementById('teamPassword').value;
+      const btn = document.getElementById('submitBtn');
+      const msg = document.getElementById('message');
+
+      msg.className = 'message';
+      msg.style.display = 'none';
+      msg.textContent = '';
+
+      if (!email || !newPassword || !teamPassword) {
+        msg.className = 'message error';
+        msg.textContent = 'Please fill in all fields.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating...';
+
+      try {
+        const res = await fetch('/api/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword, teamPassword })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          msg.className = 'message success';
+          msg.style.display = 'block';
+          msg.textContent = '✓ Password Change Complete!';
+          document.getElementById('email').value = '';
+          document.getElementById('newPassword').value = '';
+        } else {
+          msg.className = 'message error';
+          msg.style.display = 'block';
+          msg.textContent = '✗ ' + data.message;
+        }
+      } catch (err) {
+        msg.className = 'message error';
+        msg.style.display = 'block';
+        msg.textContent = '✗ Network error. Please try again.';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Reset Password';
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') resetPassword();
+    });
+  </script>
+</body>
+</html>
